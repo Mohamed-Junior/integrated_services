@@ -20,8 +20,8 @@ namespace DSSGBOAdmin.Controllers
         {
             try
             {
-                    List<Contract> AllContracts = BLL_Contract.SelectAll();
-                    return Json(new { success = true, message = "Success", data = AllContracts });
+                List<Contract> AllContracts = BLL_Contract.SelectAll();
+                return Json(new { success = true, message = "Success", data = AllContracts });
             }
             catch (Exception e)
             {
@@ -34,9 +34,9 @@ namespace DSSGBOAdmin.Controllers
         {
             try
             {
-                    Contract contract = BLL_Contract.SelectById(ID);
-                    return Json(new { success = true, message = "Success", data = contract });
-                
+                Contract contract = BLL_Contract.SelectById(ID);
+                return Json(new { success = true, message = "Success", data = contract });
+
             }
             catch (Exception e)
             {
@@ -44,7 +44,7 @@ namespace DSSGBOAdmin.Controllers
             }
         }
 
-        [HttpGet("{IdOrganization}/contracts/active")]
+        [HttpGet("organizations/{IdOrganization}/active")]
         public JsonResult GetCurrentContractByOrganization(long IdOrganization)
         {
             try
@@ -61,22 +61,20 @@ namespace DSSGBOAdmin.Controllers
             }
         }
 
-
-        [HttpGet("{idOrganization}/contracts")]
+        [HttpGet("organizations/{idOrganization}")]
         public JsonResult GetAllContractsByOrganization(long idOrganization)
         {
             try
             {
 
-                    List<Contract> AllContracts = BLL_Contract.SelectByOrganization(idOrganization);
-                    return Json(new { success = true, message = "Success", data = AllContracts });
+                List<Contract> AllContracts = BLL_Contract.SelectByOrganization(idOrganization);
+                return Json(new { success = true, message = "Success", data = AllContracts });
             }
             catch (Exception e)
             {
                 return Json(new { success = false, message = e.Message });
             }
         }
-
 
         [HttpPost("")]
         public JsonResult AddNewContract(Contract contract)
@@ -92,15 +90,14 @@ namespace DSSGBOAdmin.Controllers
             }
         }
 
-
         [HttpPost("{ID}")]
         public JsonResult UpdateContracts(long ID, Contract contract)
         {
             try
             {
 
-                    BLL_Contract.Update(ID, contract);
-                    return Json(new { success = true, message = "Modifié avec success" });
+                BLL_Contract.Update(ID, contract);
+                return Json(new { success = true, message = "Modifié avec success" });
             }
             catch (Exception e)
             {
@@ -114,8 +111,8 @@ namespace DSSGBOAdmin.Controllers
             try
             {
 
-                    BLL_Contract.Delete(ID);
-                    return Json(new { success = true, message = "Supprimé avec success" });
+                BLL_Contract.Delete(ID);
+                return Json(new { success = true, message = "Supprimé avec success" });
             }
             catch (Exception e)
             {
@@ -129,8 +126,8 @@ namespace DSSGBOAdmin.Controllers
             try
             {
 
-                    BLL_Contract.TerminerContract(ID, IdOrganization, TypeOrganization, "terminer");
-                    return Json(new { success = true, message = "Terminé avec success" });
+                BLL_Contract.TerminerContract(ID, IdOrganization, TypeOrganization, "terminer");
+                return Json(new { success = true, message = "Terminé avec success" });
             }
             catch (Exception e)
             {
