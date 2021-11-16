@@ -12,16 +12,18 @@ namespace DSSGBOAdmin.Utilities
 {
     public class MyHelpers
     {
-        public static string IdentifiantAdminRequest = "admin_apps";
+        // L'identifiant de l'admin GBO pour le requette  IdentifiantAdminRequest => OrganizationSystemPrefix
+        public static string IdentifiantAdminRequest = "GBOADMIN";
         public static string UrlSaveFieBackupCloud = $"https://localhost:5001/backUps/";
         public static string DirOrganization = @"D:\DocStream\AdminPFE\AdminServices\Courriers";
 
+        // Pour l'envoie de Backup vers Server Nas Ou l'admin GBO => l'endroit de la sauvegarde de Backup.
         public static async Task<HttpResponseMessage> SendRequestToServiceAPI(HttpMethod Method, string UrlRequest, HttpContent _Body)
         {
             var cl = new HttpClient();
             cl.BaseAddress = new Uri(UrlRequest);
 
-            cl.DefaultRequestHeaders.Add("Cookie", $"IdentifiantUserRequest={MyHelpers.IdentifiantAdminRequest}");
+            //cl.DefaultRequestHeaders.Add("Cookie", $"IdentifiantUserRequest={MyHelpers.IdentifiantAdminRequest}");
 
             HttpResponseMessage response;
 
@@ -47,6 +49,7 @@ namespace DSSGBOAdmin.Utilities
             return response;
         }
 
+        // ALL Method For Disk Mangement File using DllImport("kernel32.dll")
         [DllImport("kernel32.dll", CharSet = CharSet.Auto)]
         static extern bool GetDiskFreeSpace([MarshalAs(UnmanagedType.LPTStr)] string rootPathName,
         ref int sectorsPerCluster, ref int bytesPerSector, ref int numberOfFreeClusters, ref int totalNumbeOfClusters);
