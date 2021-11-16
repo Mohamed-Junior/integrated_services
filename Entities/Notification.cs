@@ -7,7 +7,6 @@ namespace DSSGBOAdmin.Models.Entities
 {
     public class Notification
     {
-
         public long Id { get; set; }
 
         public string Title { get; set; }
@@ -19,6 +18,5 @@ namespace DSSGBOAdmin.Models.Entities
         public string Date { get; set; }
 
         public Notification() { }
-
     }
 }
