@@ -16,9 +16,10 @@ namespace DSSGBOAdmin.Models.BLL
 
         public static void Update(long Id, Contract ContractUpdated)
         {
-            ContractUpdated.DateEnd = Convert.ToDateTime(ContractUpdated.DateStart).AddMonths(ContractUpdated.NbrMois).ToShortDateString();
+            //ContractUpdated.DateEnd = Convert.ToDateTime(ContractUpdated.DateStart).AddMonths(ContractUpdated.NbrMois).ToShortDateString();
             DAL_Contract.Update(Id, ContractUpdated);
         }
+
         // Admin GBO
         public static void TerminerContract(long Id, long IdOrganization, string TypeOrganization, string NewStatus)
         {
@@ -33,7 +34,7 @@ namespace DSSGBOAdmin.Models.BLL
             }
             catch (Exception ex)
             {
-                if (IsStatusUpdateOrg) // si il y a eu un problème lors de DAL_Contract.UpdateStatus alors on reactive l'organisation
+                if (IsStatusUpdateOrg == true) // si il y a eu un problème lors de DAL_Contract.UpdateStatus alors on reactive l'organisation
                 {
                     try
                     {
@@ -55,21 +56,16 @@ namespace DSSGBOAdmin.Models.BLL
 
         public static void ActiveLastContractsByOrganization(long IdOrganization)
         {
-
             DAL_Contract.ActiveLastContractsByOrganization(IdOrganization);
-
         }
 
         public static void Delete(long id)
         {
-
             DAL_Contract.Delete(id);
-
         }
 
         public static Contract SelectById(long id)
         {
-
             Contract contract = DAL_Contract.SelectById(id);
             if (contract == null || (contract != null && contract.Id == 0))
             {
@@ -77,62 +73,34 @@ namespace DSSGBOAdmin.Models.BLL
             }
 
             return contract;
-
-
         }
 
         public static Contract GetCurrentContractByOrganization(long IdOrganization)
         {
-
             Contract contract = DAL_Contract.SelectActiveContratByOrganization(IdOrganization);
             if (contract != null && contract.Id > 0)
             {
                 return contract;
             }
             throw new Exception("Pas de contract active pour cette organisation");
-
-
         }
 
         public static List<Contract> SelectByOrganization(long idOrg)
         {
-
             return DAL_Contract.SelectByOrganization(idOrg);
-
-
         }
 
         public static List<Contract> SelectAll()
         {
-
             return DAL_Contract.SelectAll();
-
         }
-        // valid date conctarct 
-        //public static bool IsContractOrganizationValide(Contract CurrentContract)
-        //{
 
-        //    if (CurrentContract != null && CurrentContract.Id > 0)
-        //        return CheckValidityContractDate(CurrentContract);
-
-        //    return false;
-        //}
-        // valid date & NbUser conctarct 
-        //public static bool IsContractOrganizationUserValide(Contract CurrentContract)
-        //{
-
-        //    if (CurrentContract != null && CurrentContract.Id > 0 && IsContractOrganizationValide(CurrentContract))
-        //        return CheckValidityContractUser(CurrentContract);
-
-        //    return false;
-        //}
-
-        // Test validit date Contract 
+        // Test validite date Contract 
         public static bool CheckValidityContractDate(Contract CurrentContract)
         {
             try
             {
-                DateTime EndContractDate = DateTime.Parse(CurrentContract.DateEnd);
+                DateTime EndContractDate = DateTime.Parse(CurrentContract.DateStart).AddMonths(CurrentContract.NbrMois);
                 double DaysContractLeft = EndContractDate.Subtract(DateTime.Now).TotalDays;
 
                 if (DaysContractLeft >= 0)
@@ -142,10 +110,10 @@ namespace DSSGBOAdmin.Models.BLL
 
             return false;
         }
+
         // valid Number User conctarct 
         public static bool CheckValidityContractUser(Contract CurrentContract)
         {
-
             try
             {
                 int ContractTotalNumberUser = CurrentContract.NbrUser;
@@ -153,7 +121,6 @@ namespace DSSGBOAdmin.Models.BLL
 
                 if ((ContractTotalNumberUser - CurrentNumberUser) > 0)
                     return true;
-
             }
             catch { }
 
