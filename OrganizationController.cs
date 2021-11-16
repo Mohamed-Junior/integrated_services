@@ -15,7 +15,9 @@ namespace DSSGBOAdmin.Controllers
     [ApiController]
     public class OrganizationController : Controller
     {
+
         private readonly IWebHostEnvironment webHostingEnvironment;
+
         public OrganizationController(IWebHostEnvironment environment)
         {
             webHostingEnvironment = environment;
@@ -51,28 +53,7 @@ namespace DSSGBOAdmin.Controllers
                 return Json(new { success = false, message = "Erreur serveur: " + ex.Message });
             }
         }
-        [Route("Version2/{Id}")]
-        [HttpGet]
-        public IActionResult Get(long Id)
-        {
-            try
-            {
-                Organization organization;
-                organization = BLL_Organization.SelectById(Id);
-                if (organization == null)
-                {
-                    return NotFound("Organisation introuvable.");
-                }
-                else
-                {
-                    return Ok(organization);
-                }
-            }
-            catch (Exception e)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
-            }
-        }
+
         [Route("")]
         [HttpPost]
         public JsonResult Post([FromForm] Organization organization)
@@ -84,20 +65,20 @@ namespace DSSGBOAdmin.Controllers
             }
             catch (Exception ex)
             {
-                return Json(new { success = false, message = "Erreur serveur: "+ ex.Message });
+                return Json(new { success = false, message = "Erreur serveur: " + ex.Message });
             }
         }
 
         [Route("{id:long}")]
         [HttpPut]
-        public JsonResult Put(long id,[FromBody] Organization organization, long UserRequestId, string UserRequestName, string PrefixOrg)
+        public JsonResult Put(long id, [FromBody] Organization organization, long UserRequestId, string UserRequestName, string PrefixOrg)
         {
             try
             {
                 bool IsAdminRequest = false;
                 if (PrefixOrg.Equals(MyHelpers.IdentifiantAdminRequest))
                     IsAdminRequest = true;
-                BLL_Organization.Update(id,organization, IsAdminRequest, UserRequestId, UserRequestName, PrefixOrg, webHostingEnvironment.ContentRootPath);
+                BLL_Organization.Update(id, organization, IsAdminRequest, UserRequestId, UserRequestName, PrefixOrg, webHostingEnvironment.ContentRootPath);
                 return Json(new { success = true, message = "Organisation modifié avec succès" });
             }
             catch (Exception ex)
@@ -121,47 +102,13 @@ namespace DSSGBOAdmin.Controllers
                 return Json(new { success = false, message = ex.Message });
             }
         }
-        //[Route("{IdOrganization}/users")]
-        //[HttpGet]
-        //public IActionResult GetAllUersByOrganization(long IdOrganization)
-        //{
-        //    try
-        //    {
-        //        string IpRemoteAdress = MyHelpers.GetIpRequest(HttpContext.Connection.RemoteIpAddress);
-        //        string IdentifiantUserRequest = MyHelpers.GetIdentifiantUserRequest(Request.Cookies);
 
-        //        if (MyHelpers.ValidateIpAdresse(IpRemoteAdress, BLL_IpAdresse.SelectAllIpAdresseValidation(IdentifiantUserRequest)))
-        //        {
-        //            bool IsAdminRequest = false;
-        //            if (IdentifiantUserRequest.Equals(MyHelpers.IdentifiantAdminRequest))
-        //                IsAdminRequest = true;
-
-        //            List<User> users = BLL_User.SelectAll(IdOrganization, IsAdminRequest);
-        //            if (users != null && users.Count > 0)
-        //                return Json(new { success = true, message = "Utlisateurs trouves", data = users });
-        //            else
-        //                return Json(new { success = true, message = "Pas des utlisateurs pour cette organisation", data = users });
-        //        }
-        //        else
-        //        {
-        //            throw new Exception("Requete refusée pour cette adresse IP " + IpRemoteAdress);
-        //        }
-
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return Json(new { success = false, message = "Erreur serveur: " + ex.Message });
-        //    }
-        //}
-
-        // RQ: Method status GetStatisticOrganization => create table Settings for Path for resolution problem.
-
-        [HttpGet("{id}/stats")]
-        public JsonResult GetStatisticOrganization(long id,string dirOrganization)
+        [HttpGet("{id}/statistic")]
+        public JsonResult GetStatisticOrganization(long id)
         {
             try
             {
-                var result = BLL_Organization.GetStatsOrganization(id, dirOrganization);
+                var result = BLL_Organization.GetStatsOrganization(id);
                 return Json(new { success = true, message = "", data = result });
             }
             catch (Exception ex)
@@ -169,7 +116,6 @@ namespace DSSGBOAdmin.Controllers
                 return Json(new { success = false, message = ex.Message });
             }
         }
-
 
         [HttpPost("{id}/status")]
         public JsonResult UpdateStatusOrganization(long id, string NewStatus, string NewType)
