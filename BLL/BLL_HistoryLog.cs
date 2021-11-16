@@ -10,7 +10,8 @@ namespace DSSGBOAdmin.Models.BLL
 {
     public class BLL_HistoryLog
     {
-        public static void SaveLog(long IdUserAction,string NameUserAction, string PrefixOrgAction, UserActionsHistory NewActionHistory, string WebRootPath)
+
+        public static void SaveLog(long IdUserAction, string NameUserAction, string PrefixOrgAction, UserActionsHistory NewActionHistory, string WebRootPath)
         {
             // Chemin de chaque organisation au niveau de GBO.
             string PathRooteHistories = Path.Combine(WebRootPath, "Histories");
@@ -19,7 +20,7 @@ namespace DSSGBOAdmin.Models.BLL
             bool UserExistInHistory = false;
 
             UserHistoryLog userActionsHistory = AllHistoryOrg.Find(user => user.UserIdCurrent == IdUserAction);
-            if(userActionsHistory != null)
+            if (userActionsHistory != null)
             {
                 userActionsHistory.AllActionHistories.Add(NewActionHistory);
                 UserExistInHistory = true;
@@ -41,6 +42,7 @@ namespace DSSGBOAdmin.Models.BLL
 
             File.WriteAllText(FullPathFile, JsonConvert.SerializeObject(AllHistoryOrg));
         }
+
         private static List<UserHistoryLog> GetOrgHistoryLogs(string PathRooteHistories, string PathFolderOrganization)
         {
             if (!Directory.Exists(PathRooteHistories))
@@ -57,6 +59,5 @@ namespace DSSGBOAdmin.Models.BLL
             }
             return AllHistoryOrg;
         }
-        
     }
 }
