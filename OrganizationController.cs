@@ -15,9 +15,7 @@ namespace DSSGBOAdmin.Controllers
     [ApiController]
     public class OrganizationController : Controller
     {
-
         private readonly IWebHostEnvironment webHostingEnvironment;
-
         public OrganizationController(IWebHostEnvironment environment)
         {
             webHostingEnvironment = environment;
@@ -69,7 +67,7 @@ namespace DSSGBOAdmin.Controllers
             }
         }
 
-        [Route("{id:long}")]
+        [Route("{id}")]
         [HttpPut]
         public JsonResult Put(long id, [FromBody] Organization organization, long UserRequestId, string UserRequestName, string PrefixOrg)
         {
@@ -88,7 +86,7 @@ namespace DSSGBOAdmin.Controllers
         }
 
         // DELETE api/<OrganizationController>/5
-        [Route("{id:long}")]
+        [Route("{id}")]
         [HttpDelete]
         public JsonResult Delete(long id)
         {
@@ -103,12 +101,12 @@ namespace DSSGBOAdmin.Controllers
             }
         }
 
-        [HttpGet("{id}/statistic")]
+        [HttpGet("{id}/statistic")] //changer l'url pour avoir les statistiques
         public JsonResult GetStatisticOrganization(long id)
         {
             try
             {
-                var result = BLL_Organization.GetStatsOrganization(id);
+                var result = BLL_Organization.GetStatsOrganization(id); //on va prendre le chemin de GBO a partir de la table Paramter
                 return Json(new { success = true, message = "", data = result });
             }
             catch (Exception ex)
