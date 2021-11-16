@@ -30,7 +30,7 @@ namespace DSSGBOAdmin.Controllers
             webHostingEnvironment = environment;
         }
 
-        [Route("Organization/{IdOrganization}")]
+        [Route("Organization/{IdOrganization}")]//ajouter l'id de l'organization
         [HttpGet]
         public IActionResult GetAllUers(long IdOrganization)
         {
@@ -41,7 +41,7 @@ namespace DSSGBOAdmin.Controllers
                 if (users != null && users.Count > 0)
                     return Json(new { success = true, message = "Utlisateurs trouves", data = users });
                 else
-                    return Json(new { success = true, message = "Pas des utlisateurs pour cette organisation", data = users });
+                    return Json(new { success = false, message = "Pas d'utlisateurs pour cette organisation", data = users });
 
             }
             catch (Exception ex)
@@ -64,7 +64,7 @@ namespace DSSGBOAdmin.Controllers
                 }
                 else
                 {
-                    return Json(new { success = true, message = "Utilisateur introuvable.", data = user });
+                    return Json(new { success = false, message = "Utilisateur introuvable.", data = user });
                 }
             }
             catch (Exception ex)
