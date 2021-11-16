@@ -7,7 +7,6 @@ namespace DSSGBOAdmin.Models.Entities
 {
     public class Offre
     {
-
         public long Id { get; set; }
 
         public string Name { get; set; }
@@ -25,6 +24,5 @@ namespace DSSGBOAdmin.Models.Entities
         public double Price { get; set; }
 
         public Offre() { }
-
     }
 }
