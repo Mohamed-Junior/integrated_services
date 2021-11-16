@@ -13,14 +13,15 @@ namespace DSSGBOAdmin.Controllers
     [ApiController]
     public class IpAdresseController : Controller
     {
-
         [HttpGet("")]
         public JsonResult GetAllIpAdresses()
         {
             try
             {
-                List<IpAdresse> AllIpAdresses = BLL_IpAdresse.SelectAllIpAdresse();
+
+                string AllIpAdresses = BLL_IpAdresse.SelectAllIpAdresseIndex();
                 return Json(new { success = true, message = "Success", data = AllIpAdresses });
+
             }
             catch (Exception e)
             {
@@ -29,13 +30,13 @@ namespace DSSGBOAdmin.Controllers
         }
 
         [HttpGet("{IdOrganization}")]
-        public JsonResult GetAllIpAdressesByPrefixOrg(long IdOrganization)
+        public JsonResult GetAllIpAdressesByOrg(long IdOrganization)
         {
             try
             {
-
-                List<IpAdresse> AllIpAdresses = BLL_IpAdresse.SelectIpAdresseByPrefixOrg(IdOrganization);
+                List<IpAdresse> AllIpAdresses = BLL_IpAdresse.SelectIpAdresseByOrg(IdOrganization);
                 return Json(new { success = true, message = "Success", data = AllIpAdresses });
+
             }
             catch (Exception e)
             {
@@ -51,6 +52,7 @@ namespace DSSGBOAdmin.Controllers
 
                 BLL_IpAdresse.AddIpAdresse(ipAdresse);
                 return Json(new { success = true, message = "Ajouté avec success" });
+
             }
             catch (Exception e)
             {
@@ -67,6 +69,7 @@ namespace DSSGBOAdmin.Controllers
 
                 BLL_IpAdresse.UpdateIpAdresse(ID, ipAdresse);
                 return Json(new { success = true, message = "Modifié avec success" });
+
             }
             catch (Exception e)
             {
@@ -74,14 +77,15 @@ namespace DSSGBOAdmin.Controllers
             }
         }
 
-        [HttpPost("{Id}/delete")]
-        public JsonResult DeleteIpAdresses(long Id)
+        [HttpPost("{ID}/delete")]
+        public JsonResult DeleteIpAdresses(long ID)
         {
             try
             {
 
-                BLL_IpAdresse.DeleteIpAdresse(Id);
+                BLL_IpAdresse.DeleteIpAdresse(ID);
                 return Json(new { success = true, message = "Supprimé avec success" });
+
             }
             catch (Exception e)
             {
