@@ -14,6 +14,7 @@ namespace DSSGBOAdmin.Models.BLL
         {
             return DAL_Organization.Add(organization);
         }
+
         public static void Update(long Id, Organization organization, bool IsAdminRequest, long IdCurrentUser, string NameCurrentUser, string PrefixOrg, string ContentRootPath)
         {
             Organization OldOrganization = BLL_Organization.SelectById(Id);
@@ -83,29 +84,30 @@ namespace DSSGBOAdmin.Models.BLL
             }
             catch { }
         }
-        //public static void Update(long Id,Organization organization)
-        //{
-        //    DAL_Organization.Update(Id,organization);
-        //}
+
         public static void Delete(long id)
         {
             DAL_Organization.Delete(id);
         }
+
         public static Organization SelectById(long id)
         {
             return DAL_Organization.SelectById(id);
         }
+        
         public static List<Organization> SelectAll()
         {
             return DAL_Organization.SelectAll();
         }
+
         // Update Status & Type of organziation using Super Admin
         public static void UpdateStatusOrganization(long Id, string StatusOrg, string NewTypeOrg)
         {
             DAL_Organization.UpdateStatusOrganization(Id, StatusOrg, NewTypeOrg);
         }
+
         // Statistique by Organization
-        public static StatsOrganization GetStatsOrganization(long Id,string dirOrganization)
+        public static StatsOrganization GetStatsOrganization(long Id)
         {
             var Disk_usage = "";
             var User_Numbers = "";
@@ -115,8 +117,8 @@ namespace DSSGBOAdmin.Models.BLL
             var MessageErreurNumberUser = "";
             try
             {
-                //var org = DAL_Organization.SelectById(Id);
-                //var dirOrganization = Path.Combine(Directory.GetCurrentDirectory(), "Courriers")  + @"\Courriers\Courriers_" + org.OrganizationSystemPrefix;
+                var org = DAL_Organization.SelectById(Id);
+                var dirOrganization = Path.Combine(MyHelpers.DirOrganization, $"Courriers_{org.OrganizationSystemPrefix}");
                 var space = MyHelpers.GetDirectorySpace(dirOrganization);
                 NumberFileByMonth = MyHelpers.GetNumberFileByMonth(dirOrganization);
                 Disk_usage = string.Format("{0:N3}", ((double)space / (double)1000000));
@@ -150,6 +152,7 @@ namespace DSSGBOAdmin.Models.BLL
             return statsOrganization;
 
         }
+        
         // Active Organization by Create New Contract
         public static Contract ActiveOrganization(long Id, Contract contract)
         {
@@ -170,6 +173,7 @@ namespace DSSGBOAdmin.Models.BLL
             }
 
         }
+
         // Desactive Organization by Terminate ALL Contracts
         public static void DesactiveOrganization(long IdOrganization, string OldTypeOrganization)
         {
