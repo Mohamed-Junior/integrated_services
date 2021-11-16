@@ -103,6 +103,10 @@ namespace DSSGBOAdmin.Models.Entities
         public string RegDemandDecisionDate { get; set; }
 
         public string RegDecisionComments { get; set; }
+        
+        public string StatusActivationEmail { get; set; }
+        
+        public string Token { get; set; }
 
     }
 }
