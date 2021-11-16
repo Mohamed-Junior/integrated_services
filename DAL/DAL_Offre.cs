@@ -146,7 +146,6 @@ namespace DSSGBOAdmin.Models.DAL
             return offre;
         }
 
-
         // Test unicity Name
         private static bool CheckEntityUnicityName(string Name)
         {
