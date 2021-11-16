@@ -13,17 +13,23 @@ namespace DSSGBOAdmin.Models.BLL
     {
 
         // New Version Methods Today 21/10/2021 Demands
-        public static void Add(Demande demande)
+        public static string Add(Demande demande, string url)
         {
-            demande.RegDemandDate = DateTime.Now.ToShortDateString();
+
+            demande.RegDemandDate = DateTime.Now.ToString("dd/MM/yyyy hh:mm");
             demande.RegDemandDecision = "attends";
-            demande.RegDecisionComments = " ";
-            demande.RegDemandDecisionDate = DateTime.MinValue.ToShortDateString();
+            demande.StatusActivationEmail = "attends";
+            //demande.RegDecisionComments = " ";
+            //demande.RegDemandDecisionDate = DateTime.MinValue.ToShortDateString();
             DAL_Demande.AddDemande(demande);
+            var mailRepository = new MailRepository("smtp.gmail.com", 465, true, "dssgbo56@gmail.com", "dssgbo56");
+            string message = mailRepository.SendEmailConfirmation(demande.Email, demande.Name, url);
+            return message;
         }
 
         private static long CreateNewOrganizationFromDemande(long id, Demande demande, string OrganizationSystemPrefix)
         {
+
             Organization newOrganization = new Organization(
                                                 0, demande.Name, null, demande.Name.Substring(0, 3) + id, null,
                                                 demande.Affiliation, null, demande.FieldOfActivity, demande.Adress,
@@ -36,6 +42,7 @@ namespace DSSGBOAdmin.Models.BLL
 
         private static long CreateNewUserAdminFromDemande(long newOrgId, Demande demande)
         {
+
             User AdminOrg = new User(0, newOrgId, "Admin" + demande.Name.ToUpper(), demande.Email,
                                    "12345678", "Administrateur", DateTime.Today,
                                     null, null, demande.Email, null);
@@ -96,8 +103,7 @@ namespace DSSGBOAdmin.Models.BLL
         {
 
             Demande checkDemandeExist = BLL_Demande.SelectById(id);
-
-            if (checkDemandeExist != null && checkDemandeExist.Id > 0)
+            if (checkDemandeExist != null && checkDemandeExist.ID > 0)
             {
                 demande.RegDemandDecision = demande.RegDemandDecision.Trim().ToLower();
                 demande.RegDemandDecisionDate = DateTime.Now.ToShortDateString();
@@ -136,6 +142,21 @@ namespace DSSGBOAdmin.Models.BLL
         public static List<Demande> SelectAll()
         {
             return DAL_Demande.selectAll();
+        }
+
+        public static KeyValuePair<string, string> SelectByToken(string Token)
+        {
+            return DAL_Demande.SelectByToken(Token);
+        }
+
+        public static void UpdateDemandeStatusActivationEmail(string Token, string StatusActivationEmail)
+        {
+            DAL_Demande.UpdateDemandeStatusActivationEmail(Token, StatusActivationEmail);
+        }
+
+        public static void UpdateDemandeToken(string NewToken, string OldToken)
+        {
+            DAL_Demande.UpdateDemandeToken(NewToken, OldToken);
         }
     }
 }
