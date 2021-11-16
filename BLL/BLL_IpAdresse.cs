@@ -25,11 +25,17 @@ namespace DSSGBOAdmin.Models.BLL
             DAL_IpAdresse.DeleteIpAdresse(id);
         }
 
+        /**
+         * On prendre les address IP grace à l'Id de l'organization
+         */
         public static List<IpAdresse> SelectIpAdresseByOrg(long IdOrganization)
         {
             return DAL_IpAdresse.SelectIpAdresseByOrg(IdOrganization);
         }
 
+        /**
+         * Pour afficher toutes les adresses IP par organization
+         */
         public static string SelectAllIpAdresseIndex()
         {
             return DAL_IpAdresse.SelectAllIpAdresseIndex();
