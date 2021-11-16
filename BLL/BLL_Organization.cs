@@ -117,7 +117,7 @@ namespace DSSGBOAdmin.Models.BLL
             var MessageErreurNumberUser = "";
             try
             {
-                var org = DAL_Organization.SelectById(Id);
+                var org = DAL_Organization.SelectById(Id); //on prends l'organization de la table
                 var dirOrganization = Path.Combine(MyHelpers.DirOrganization, $"Courriers_{org.OrganizationSystemPrefix}");
                 var space = MyHelpers.GetDirectorySpace(dirOrganization);
                 NumberFileByMonth = MyHelpers.GetNumberFileByMonth(dirOrganization);
@@ -150,7 +150,6 @@ namespace DSSGBOAdmin.Models.BLL
             };
 
             return statsOrganization;
-
         }
         
         // Active Organization by Create New Contract
@@ -171,7 +170,6 @@ namespace DSSGBOAdmin.Models.BLL
 
                 throw e;
             }
-
         }
 
         // Desactive Organization by Terminate ALL Contracts
@@ -191,7 +189,6 @@ namespace DSSGBOAdmin.Models.BLL
 
                 throw e;
             }
-
         }
     }
 }
