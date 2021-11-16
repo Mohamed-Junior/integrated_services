@@ -13,10 +13,6 @@ namespace DSSGBOAdmin.Controllers
     [ApiController]
     public class OffresController : Controller
     {
-
-        /*********************************** MANAGE Offres SUPER ADMIN ***********************************/
-
-
         [HttpGet("")]
         public IActionResult IndexOffre()
         {
@@ -29,23 +25,20 @@ namespace DSSGBOAdmin.Controllers
             {
                 return Json(new { success = false, message = ex.Message });
             }
-
         }
 
-
-        [HttpGet("{ID}")]
-        public IActionResult DetailOffres(long ID)
+        [HttpGet("{Id}")]
+        public IActionResult DetailOffres(long Id)
         {
             try
             {
-                var mOffre = BLL_Offre.SelectById(ID);
+                var mOffre = BLL_Offre.SelectById(Id);
                 return Json(new { success = true, message = "Success", data = mOffre });
             }
             catch (Exception ex)
             {
                 return Json(new { success = false, message = ex.Message });
             }
-
         }
 
         [HttpPost("")]
@@ -60,40 +53,34 @@ namespace DSSGBOAdmin.Controllers
             {
                 return Json(new { success = false, message = ex.Message });
             }
-
         }
 
-
-        [HttpPost("{ID}")]
-        public IActionResult UpdateOffre(long ID, Offre mOffre)
+        [HttpPost("{Id}")]
+        public IActionResult UpdateOffre(long Id, Offre mOffre)
         {
-
             try
             {
-                BLL_Offre.Update(ID, mOffre);
+                BLL_Offre.Update(Id, mOffre);
                 return Json(new { success = true, message = "Success", data = mOffre });
             }
             catch (Exception ex)
             {
                 return Json(new { success = false, message = ex.Message });
-
             }
         }
 
-        [HttpPost("{ID}/delete")]
-        public IActionResult DeleteOffre(long ID)
+        [HttpPost("{Id}/delete")]
+        public IActionResult DeleteOffre(long Id)
         {
-
             try
             {
-                BLL_Offre.Delete(ID);
+                BLL_Offre.Delete(Id);
                 return Json(new { success = true, message = "Success" });
             }
             catch (Exception ex)
             {
                 return Json(new { success = false, message = ex.Message });
             }
-
         }
     }
 }
