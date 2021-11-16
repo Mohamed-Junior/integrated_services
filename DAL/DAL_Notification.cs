@@ -40,6 +40,7 @@ namespace DSSGBOAdmin.Models.DAL
                 DataBaseAccessUtilities.NonQueryRequest(command);
             }
         }
+
         // delete notification
         public static void Delete(long id)
         {
@@ -50,6 +51,7 @@ namespace DSSGBOAdmin.Models.DAL
                 DataBaseAccessUtilities.NonQueryRequest(command);
             }
         }
+
         // select one record of table notification
         public static Notification SelectById(long id)
         {
@@ -85,6 +87,7 @@ namespace DSSGBOAdmin.Models.DAL
                 return notification;
             }
         }
+
         // select all record of table notification
         public static List<Notification> SelectAll(bool IsDashboard)
         {
@@ -127,7 +130,5 @@ namespace DSSGBOAdmin.Models.DAL
                 return Notifications;
             }
         }
-
-
     }
 }
