@@ -126,6 +126,7 @@ namespace DSSGBOAdmin.Models.DAL
         }
 
         // select all record of table ipAdresse
+        //nouvelle requete sql pour afficher les adresses ip par organization
         public static string SelectAllIpAdresseIndex()
         {
             string AllIpAdresseIndex = "";
