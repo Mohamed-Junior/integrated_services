@@ -11,5 +11,5 @@ namespace DSSGBOAdmin.Models.Entities
         public object OldValue { get; set; }
         public object NewVaue { get; set; }
         public string DateAction { get; set; }
-    }
+    } 
 }
