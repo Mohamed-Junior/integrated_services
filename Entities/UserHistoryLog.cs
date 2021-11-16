@@ -11,5 +11,5 @@ namespace DSSGBOAdmin.Models.Entities
         public string UserNameCurrent { get; set; }
         public string PrefixOrganization { get; set; }
         public List<UserActionsHistory> AllActionHistories { get; set; }
-    }
+    } 
 }
