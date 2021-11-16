@@ -18,10 +18,8 @@ namespace DSSGBOAdmin.Controllers
         {
             try
             {
-
                 string AllIpAdresses = BLL_IpAdresse.SelectAllIpAdresseIndex();
                 return Json(new { success = true, message = "Success", data = AllIpAdresses });
-
             }
             catch (Exception e)
             {
@@ -36,7 +34,6 @@ namespace DSSGBOAdmin.Controllers
             {
                 List<IpAdresse> AllIpAdresses = BLL_IpAdresse.SelectIpAdresseByOrg(IdOrganization);
                 return Json(new { success = true, message = "Success", data = AllIpAdresses });
-
             }
             catch (Exception e)
             {
@@ -49,10 +46,8 @@ namespace DSSGBOAdmin.Controllers
         {
             try
             {
-
                 BLL_IpAdresse.AddIpAdresse(ipAdresse);
                 return Json(new { success = true, message = "Ajouté avec success" });
-
             }
             catch (Exception e)
             {
@@ -61,15 +56,13 @@ namespace DSSGBOAdmin.Controllers
         }
 
 
-        [HttpPost("{ID}")]
-        public JsonResult UpdateIpAdresses(long ID, IpAdresse ipAdresse)
+        [HttpPost("{Id}")]
+        public JsonResult UpdateIpAdresses(long Id, IpAdresse ipAdresse)
         {
             try
             {
-
-                BLL_IpAdresse.UpdateIpAdresse(ID, ipAdresse);
+                BLL_IpAdresse.UpdateIpAdresse(Id, ipAdresse);
                 return Json(new { success = true, message = "Modifié avec success" });
-
             }
             catch (Exception e)
             {
@@ -77,21 +70,18 @@ namespace DSSGBOAdmin.Controllers
             }
         }
 
-        [HttpPost("{ID}/delete")]
-        public JsonResult DeleteIpAdresses(long ID)
+        [HttpPost("{Id}/delete")]
+        public JsonResult DeleteIpAdresses(long Id)
         {
             try
             {
-
-                BLL_IpAdresse.DeleteIpAdresse(ID);
+                BLL_IpAdresse.DeleteIpAdresse(Id);
                 return Json(new { success = true, message = "Supprimé avec success" });
-
             }
             catch (Exception e)
             {
                 return Json(new { success = false, message = e.Message });
             }
         }
-
     }
 }
