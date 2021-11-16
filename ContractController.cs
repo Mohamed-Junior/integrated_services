@@ -44,16 +44,13 @@ namespace DSSGBOAdmin.Controllers
             }
         }
 
-        [HttpGet("organizations/{IdOrganization}/active")]
+        [HttpGet("organizations/{IdOrganization}/active")] //Changer l'url pour obtenir le contract active de l'organization
         public JsonResult GetCurrentContractByOrganization(long IdOrganization)
         {
             try
             {
-
                 Contract contract = BLL_Contract.GetCurrentContractByOrganization(IdOrganization);
                 return Json(new { success = true, message = "Success", data = contract });
-
-
             }
             catch (Exception e)
             {
@@ -61,12 +58,11 @@ namespace DSSGBOAdmin.Controllers
             }
         }
 
-        [HttpGet("organizations/{idOrganization}")]
+        [HttpGet("organizations/{idOrganization}")] //Changer l'url pour obtenir tous les contracts de l'organization
         public JsonResult GetAllContractsByOrganization(long idOrganization)
         {
             try
             {
-
                 List<Contract> AllContracts = BLL_Contract.SelectByOrganization(idOrganization);
                 return Json(new { success = true, message = "Success", data = AllContracts });
             }
@@ -95,7 +91,6 @@ namespace DSSGBOAdmin.Controllers
         {
             try
             {
-
                 BLL_Contract.Update(ID, contract);
                 return Json(new { success = true, message = "Modifié avec success" });
             }
@@ -110,7 +105,6 @@ namespace DSSGBOAdmin.Controllers
         {
             try
             {
-
                 BLL_Contract.Delete(ID);
                 return Json(new { success = true, message = "Supprimé avec success" });
             }
@@ -125,7 +119,6 @@ namespace DSSGBOAdmin.Controllers
         {
             try
             {
-
                 BLL_Contract.TerminerContract(ID, IdOrganization, TypeOrganization, "terminer");
                 return Json(new { success = true, message = "Terminé avec success" });
             }
@@ -137,5 +130,4 @@ namespace DSSGBOAdmin.Controllers
         }
 
     }
-
 }
