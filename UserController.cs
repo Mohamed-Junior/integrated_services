@@ -25,18 +25,19 @@ namespace DSSGBOAdmin.Controllers
     public class UserController : Controller
     {
         private readonly IWebHostEnvironment webHostingEnvironment;
-
         public UserController(IWebHostEnvironment environment)
         {
             webHostingEnvironment = environment;
         }
-        [Route("Organization")]
+
+        [Route("Organization/{IdOrganization}")]
         [HttpGet]
         public IActionResult GetAllUers(long IdOrganization)
         {
             try
             {
                 List<User> users = BLL_User.SelectAll(IdOrganization);
+
                 if (users != null && users.Count > 0)
                     return Json(new { success = true, message = "Utlisateurs trouves", data = users });
                 else
@@ -49,14 +50,14 @@ namespace DSSGBOAdmin.Controllers
             }
         }
 
-        // GET api/<UserController>/5
         [HttpGet]
-        [Route("{iduser:long}")]
+        [Route("{iduser}")]
         public IActionResult Get(long iduser)
         {
             try
             {
                 User user = BLL_User.SelectById(iduser);
+
                 if (user != null && user.Id > 0)
                 {
                     return Json(new { success = true, message = "Utlisateur trouve", data = user });
@@ -75,15 +76,14 @@ namespace DSSGBOAdmin.Controllers
         // POST api/<UserController>
         [Route("")]
         [HttpPost]
-        public JsonResult Post([FromForm] User user, long UserRequestId,string UserRequestName, string PrefixOrg)
+        public JsonResult Post([FromForm] User user, long UserRequestId, string UserRequestName, string PrefixOrg)
         {
             try
             {
-                //UserRequestId = 5;
-                //PrefixOrg = "GBOTest";
                 bool IsAdminRequest = false;
                 if (PrefixOrg.Equals(MyHelpers.IdentifiantAdminRequest))
                     IsAdminRequest = true;
+
                 BLL_User.Add(user, IsAdminRequest, UserRequestId, UserRequestName, PrefixOrg, webHostingEnvironment.ContentRootPath);
                 return Json(new { success = true, message = "Utilisateur ajouté avec success" });
             }
@@ -94,7 +94,7 @@ namespace DSSGBOAdmin.Controllers
         }
 
         // PUT api/<UserController>/5
-        [Route("{id:long}")]
+        [Route("{id}")]
         [HttpPut]
         public JsonResult Put(long id, [FromForm] User user, long UserRequestId, string UserRequestName, string PrefixOrg)
         {
@@ -103,6 +103,7 @@ namespace DSSGBOAdmin.Controllers
                 bool IsAdminRequest = false;
                 if (PrefixOrg.Equals(MyHelpers.IdentifiantAdminRequest))
                     IsAdminRequest = true;
+
                 BLL_User.Update(id, user, IsAdminRequest, UserRequestId, UserRequestName, PrefixOrg, webHostingEnvironment.ContentRootPath);
                 return Json(new { success = true, message = "Utilisateur modifié avec succès." });
             }
@@ -114,10 +115,6 @@ namespace DSSGBOAdmin.Controllers
 
         [Route("{id}")]
         [HttpDelete]
-        //[ProducesResponseType(StatusCodes.Status204NoContent)]
-        //[ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
-        //[ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
-        //[ProducesDefaultResponseType]
         public JsonResult Delete(long id, long UserRequestId, string UserRequestName, string PrefixOrg)
         {
             try
@@ -125,7 +122,7 @@ namespace DSSGBOAdmin.Controllers
                 bool IsAdminRequest = false;
                 if (PrefixOrg.Equals(MyHelpers.IdentifiantAdminRequest))
                     IsAdminRequest = true;
-                //Response.Headers.Append("Access-Control-Allow-Origin", "*");
+
                 BLL_User.Delete(id, IsAdminRequest, UserRequestId, UserRequestName, PrefixOrg, webHostingEnvironment.ContentRootPath);
                 return Json(new { success = true, message = "Utilisateur supprimé avec succès" });
             }
@@ -143,8 +140,8 @@ namespace DSSGBOAdmin.Controllers
             try
             {
                 string message;
-                //System.Diagnostics.Debug.WriteLine("message1=" + message);
                 List<User> Users = BLL_User.TestConnexion(Name, Password, out message);
+
                 if (Users != null && message == "Connexion réussie")
                 {
                     if (Users.Count == 1)
@@ -174,7 +171,6 @@ namespace DSSGBOAdmin.Controllers
                         }
                     }
                 }
-                //System.Diagnostics.Debug.WriteLine("message2=" + message);
                 return new KeyValuePair<List<User>, string>(Users, message);
 
             }
@@ -183,6 +179,7 @@ namespace DSSGBOAdmin.Controllers
                 return new KeyValuePair<List<User>, string>(new List<User>(), ex.Message);
             }
         }
+
         // rechercher compte utilisateur
         // test connexion
         [Route("Login/RechercherCompte")]
@@ -195,7 +192,7 @@ namespace DSSGBOAdmin.Controllers
                 if (ModelState.IsValid)
                 {
                     List<User> Users = BLL_User.RechercherCompteUser(Email, out msg);
-                    if(Users != null && Users.Count == 1)
+                    if (Users != null && Users.Count == 1)
                     {
                         //Get Adress IPV4 With Request
                         string IpRemoteAdress = BLL_IpAdresse.GetIpRequest(HttpContext.Connection.RemoteIpAddress);
@@ -211,21 +208,21 @@ namespace DSSGBOAdmin.Controllers
                         if (!TestFinContract)
                             return Json(new { success = false, message = $"Le contrat n'est pas valide pour cette organisation {CurrentContract.NameOrganization}" });
                     }
-                    else if(Users.Count> 1)
+                    else if (Users.Count > 1)
                     {
                         return Json(new { success = true, message = msg, data = Users });
                     }
                     else
                     {
-                        return Json(new { success = false, message = msg});
+                        return Json(new { success = false, message = msg });
                     }
-                   
+
                 }
-                return Json(new { success = false,message = "Modèle invalide." });
+                return Json(new { success = false, message = "Modèle invalide." });
             }
             catch (Exception ex)
             {
-                return Json(new { success = false, message = ex.Message});
+                return Json(new { success = false, message = ex.Message });
             }
         }
         // Test IP Adress && Test Validit date Contract 
@@ -237,18 +234,21 @@ namespace DSSGBOAdmin.Controllers
             {
                 //Get Adress IPV4 With Request
                 string IpRemoteAdress = BLL_IpAdresse.GetIpRequest(HttpContext.Connection.RemoteIpAddress);
+
                 // Verif IP oranization request.
                 bool TestPlageIPV4 = BLL_IpAdresse.ValidateIpAdresse(IdOrganization, IpRemoteAdress);
                 if (!TestPlageIPV4)
                     return Json(new { success = false, message = $"Requete refusée pour cette adresse IP {IpRemoteAdress}" });
+
                 // Get Last Actif Contract
                 Contract CurrentContract = BLL_Contract.GetCurrentContractByOrganization(IdOrganization);
+
                 // Test validit date Contract 
                 bool TestFinContract = BLL_Contract.CheckValidityContractDate(CurrentContract);
                 if (!TestFinContract)
                     return Json(new { success = false, message = $"Le contrat n'est pas valide pour cette organisation {CurrentContract.NameOrganization}" });
 
-                return Json(new { success = true, message = "Contrat Valide"});
+                return Json(new { success = true, message = "Contrat Valide" });
 
             }
             catch (Exception ex)
@@ -256,6 +256,7 @@ namespace DSSGBOAdmin.Controllers
                 return Json(new { success = false, message = ex.Message });
             }
         }
+
         // test unicite UserName
         [Route("Validation/CreateName")]
         [AcceptVerbs("Get", "Post")]
@@ -358,7 +359,5 @@ namespace DSSGBOAdmin.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
             }
         }
-
-
     }
 }
