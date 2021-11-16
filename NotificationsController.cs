@@ -27,7 +27,7 @@ namespace DSSGBOAdmin.Controllers
             }
             catch (Exception ex)
             {
-                return Json(new { success = false, message = ex.Message});
+                return Json(new { success = false, message = ex.Message });
             }
 
         }
@@ -43,11 +43,11 @@ namespace DSSGBOAdmin.Controllers
             }
             catch (Exception ex)
             {
-                return Json(new { success = false, message = ex.Message});
+                return Json(new { success = false, message = ex.Message });
             }
 
         }
-        
+
         [HttpPost("")]
         public IActionResult NewNotification(Notification mNotification)
         {
