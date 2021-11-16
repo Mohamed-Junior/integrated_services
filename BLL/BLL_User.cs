@@ -12,13 +12,15 @@ namespace DSSGBOAdmin.Models.BLL
         {
             return DAL_User.CheckEmailUnicity(Email, IdOrganization);
         }
+
         public static bool CheckNameUnicity(string Name, long IdOrganization)
         {
             return DAL_User.CheckNameUnicity(Name, IdOrganization);
         }
+
         // UserRequestID => User Connecté
         // PrefixOrg => OrganizationSystemPrefix
-        public static long Add(User user, bool IsAdminRequest, long IdCurrentUser,string NameCurrentUser, string PrefixOrg, string ContentRootPath)
+        public static long Add(User user, bool IsAdminRequest, long IdCurrentUser, string NameCurrentUser, string PrefixOrg, string ContentRootPath)
         {
             if (IsAdminRequest == false)
             {
@@ -30,8 +32,8 @@ namespace DSSGBOAdmin.Models.BLL
                 {
                     throw new Exception("Le nombre d'utilisateur du contrat est atteint.");
                 }
-
             }
+
             long IdNewUser = DAL_User.Add(user);
             try
             {
@@ -57,20 +59,13 @@ namespace DSSGBOAdmin.Models.BLL
             catch { }
 
             return IdNewUser;
-
         }
-        //public static long Add(User user)
-        //{
-        //    return DAL_User.Add(user);
-        //}
-        //public static void Update(long id, User user)
-        //{
-        //    DAL_User.Update(id, user);
-        //}
+
         public static void Update(long id, User user, bool IsAdminRequest, long IdCurrentUser, string NameCurrentUser, string PrefixOrg, string ContentRootPath)
         {
             User OldUserValue = BLL_User.SelectById(id);
             DAL_User.Update(id, user);
+
             try
             {
                 if (IsAdminRequest == false)
@@ -100,9 +95,8 @@ namespace DSSGBOAdmin.Models.BLL
                 }
             }
             catch { }
-
         }
-       
+
         public static void Delete(long id, bool IsAdminRequest, long IdCurrentUser, string NameCurrentUser, string PrefixOrg, string ContentRootPath)
         {
 
@@ -129,27 +123,30 @@ namespace DSSGBOAdmin.Models.BLL
                 }
             }
             catch { }
-
-
         }
+
         public static User SelectById(long id)
         {
             return DAL_User.SelectById(id);
         }
+
         public static List<User> SelectAll(long IdOrganization)
         {
             return DAL_User.SelectAll(IdOrganization);
         }
+        
         // RQ: Lors de connection il faut verifier le contrat c'est a dire la date. 
-        public static List<User> TestConnexion(string UserName, string Password,out string message)
+        public static List<User> TestConnexion(string UserName, string Password, out string message)
         {
-            return DAL_User.TestConnexion(UserName,Password, out message);
+            return DAL_User.TestConnexion(UserName, Password, out message);
         }
+       
         // RQ: Lors de RechercherCompteUser il faut verifier le contrat c'est a dire la date. 
         public static List<User> RechercherCompteUser(string Email, out string message)
         {
             return DAL_User.RechercherCompteUser(Email, out message);
         }
+        
         public static int CountUserByOrganization(long IdOrganization)
         {
             return DAL_User.CountUserByOrganization(IdOrganization);
