@@ -7,25 +7,23 @@ using System.Threading.Tasks;
 
 namespace DSSGBOAdmin.Models.BLL
 {
-
     public class BLL_Offre
     {
-        public static bool CheckNameUnicity(string Name)
-        {
-            return DAL_Offre.CheckNameUnicity(Name);
-        }
         public static long Add(Offre offre)
         {
             return DAL_Offre.Add(offre);
         }
+        
         public static void Update(long id, Offre offre)
         {
             DAL_Offre.Update(id, offre);
         }
+     
         public static void Delete(long id)
         {
             DAL_Offre.Delete(id);
         }
+        
         public static Offre SelectById(long id)
         {
             Offre mOffre = DAL_Offre.SelectById(id);
