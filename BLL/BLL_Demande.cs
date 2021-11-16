@@ -103,7 +103,7 @@ namespace DSSGBOAdmin.Models.BLL
         {
 
             Demande checkDemandeExist = BLL_Demande.SelectById(id);
-            if (checkDemandeExist != null && checkDemandeExist.ID > 0)
+            if (checkDemandeExist != null && checkDemandeExist.Id > 0)
             {
                 demande.RegDemandDecision = demande.RegDemandDecision.Trim().ToLower();
                 demande.RegDemandDecisionDate = DateTime.Now.ToShortDateString();
