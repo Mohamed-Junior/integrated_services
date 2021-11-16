@@ -19,7 +19,7 @@ namespace DSSGBOAdmin.Models.DAL
         private static Demande ConvertDataReaderToDemande(SqlDataReader dataReader)
         {
             Demande demande = new Demande();
-            demande.Id = dataReader.GetInt64("Id");
+            demande.ID = dataReader.GetInt64("Id");
             demande.Name = dataReader["Name"].ToString().Trim();
             demande.Affiliation = dataReader["Affiliation"].ToString().Trim();
             demande.FieldOfActivity = dataReader["FieldOfActivity"].ToString().Trim();
@@ -73,7 +73,7 @@ namespace DSSGBOAdmin.Models.DAL
                     if (dataReader.Read())
                     {
                         demande = ConvertDataReaderToDemande(dataReader);
-                        //demande.Id = dataReader.GetInt64(0);
+                        //demande.ID = dataReader.GetInt64(0);
                         //demande.Name = dataReader["Name"].ToString().Trim();
                         //demande.Affiliation = dataReader["Affiliation"].ToString().Trim();
                         //demande.FieldOfActivity = dataReader["FieldOfActivity"].ToString().Trim();
@@ -107,37 +107,47 @@ namespace DSSGBOAdmin.Models.DAL
         }
         public static void AddDemande(Demande newDemande)
         {
-            if (selectByField("Name", newDemande.Name).Id != 0 || selectByField("Email", newDemande.Email).Id != 0)
+            if (selectByField("Name", newDemande.Name).ID != 0)
             {
-                throw new MyException("Base De Données Erreur", "Demande doit etre unique.", "DAL");
+                throw new MyException("Base De Données Erreur", "Le Nom est déja utilisé.", "DAL");
+            }
+            if(selectByField("Email", newDemande.Email).ID != 0)
+            {
+                throw new MyException("Base De Données Erreur", "L'Email est déja utilisé.", "DAL");
+            }
+            if (selectByField("Phone", newDemande.Phone).ID != 0)
+            {
+                throw new MyException("Base De Données Erreur", "Le Numéro de téléphone est déja utilisé.", "DAL");
             }
             using (SqlConnection con = DBConnection.GetAuthConnection())
             {
                 string StrSQL = "insert into [RegistrationDemand]  " +
-                    "([Name],[Affiliation],[FieldOfActivity],[Adress],[PostalCode],[City],[Country],[Email],[Phone],[PersonToContact],[ContactMail],[ContactPhone],[ContactPosition],[RegDemandDate],[RegDemandDecision],[RegDemandDecisionDate],[RegDecisionComments])" +
+                    "([Name],[Affiliation],[FieldOfActivity],[Adress],[PostalCode],[City],[Country],[Email],[Phone],[PersonToContact],[ContactMail],[ContactPhone],[ContactPosition],[RegDemandDate],[RegDemandDecision],[RegDemandDecisionDate],[RegDecisionComments],StatusActivationEmail,Token)" +
                     " output INSERTED.Id " +
                     "values  (" +
-                    "@Name,@Affiliation,@FieldOfActivity,@Adress,@PostalCode,@City,@Country,@Email,@Phone,@PersonToContact,@ContactMail,@ContactPhone,@ContactPosition,@RegDemandDate,@RegDemandDecision,@RegDemandDecisionDate,@RegDecisionComments)";
+                    "@Name,@Affiliation,@FieldOfActivity,@Adress,@PostalCode,@City,@Country,@Email,@Phone,@PersonToContact,@ContactMail,@ContactPhone,@ContactPosition,@RegDemandDate,@RegDemandDecision,@RegDemandDecisionDate,@RegDecisionComments,@StatusActivationEmail,@Token)";
 
                 SqlCommand MySqlCommand = new SqlCommand(StrSQL, con);
-                MySqlCommand.Parameters.Add("@Name", SqlDbType.NVarChar).Value = newDemande.Name;
-                MySqlCommand.Parameters.Add("@Affiliation", SqlDbType.NVarChar).Value = newDemande.Affiliation ?? (object)DBNull.Value;
-                MySqlCommand.Parameters.Add("@FieldOfActivity", SqlDbType.NVarChar).Value = newDemande.FieldOfActivity ?? (object)DBNull.Value;
-                MySqlCommand.Parameters.Add("@Adress", SqlDbType.NVarChar).Value = newDemande.Adress ?? (object)DBNull.Value;
-                MySqlCommand.Parameters.Add("@PostalCode", SqlDbType.NVarChar).Value = newDemande.PostalCode ?? (object)DBNull.Value;
-                MySqlCommand.Parameters.Add("@City", SqlDbType.NVarChar).Value = newDemande.City ?? (object)DBNull.Value;
-                MySqlCommand.Parameters.Add("@Country", SqlDbType.NVarChar).Value = newDemande.Country ?? (object)DBNull.Value;
-                MySqlCommand.Parameters.Add("@Email", SqlDbType.NVarChar).Value = newDemande.Email ?? (object)DBNull.Value;
-                MySqlCommand.Parameters.Add("@Phone", SqlDbType.NVarChar).Value = newDemande.Phone ?? (object)DBNull.Value;
-                MySqlCommand.Parameters.Add("@PersonToContact", SqlDbType.NVarChar).Value = newDemande.PersonToContact ?? (object)DBNull.Value;
-                MySqlCommand.Parameters.Add("@ContactMail", SqlDbType.NVarChar).Value = newDemande.ContactMail ?? (object)DBNull.Value;
-                MySqlCommand.Parameters.Add("@ContactPhone", SqlDbType.NVarChar).Value = newDemande.ContactPhone ?? (object)DBNull.Value;
-                MySqlCommand.Parameters.Add("@ContactPosition", SqlDbType.NVarChar).Value = newDemande.ContactPosition ?? (object)DBNull.Value;
-                MySqlCommand.Parameters.Add("@RegDemandDate", SqlDbType.Date).Value = newDemande.RegDemandDate ?? (object)DBNull.Value;
-                MySqlCommand.Parameters.Add("@RegDemandDecision", SqlDbType.NVarChar).Value = newDemande.RegDemandDecision ?? (object)DBNull.Value;
-                MySqlCommand.Parameters.Add("@RegDemandDecisionDate", SqlDbType.Date).Value = newDemande.RegDemandDecisionDate == null ? (object)DBNull.Value : newDemande.RegDemandDecisionDate;
-                MySqlCommand.Parameters.Add("@RegDecisionComments", SqlDbType.NVarChar).Value = newDemande.RegDecisionComments ?? (object)DBNull.Value;
-                DataBaseAccessUtilities.NonQueryRequest(MySqlCommand);
+                MySqlCommand.Parameters.AddWithValue("@Name", newDemande.Name);
+                MySqlCommand.Parameters.AddWithValue("@Affiliation", newDemande.Affiliation ?? (object)DBNull.Value);
+                MySqlCommand.Parameters.AddWithValue("@FieldOfActivity", newDemande.FieldOfActivity ?? (object)DBNull.Value);
+                MySqlCommand.Parameters.AddWithValue("@Adress", newDemande.Adress ?? (object)DBNull.Value);
+                MySqlCommand.Parameters.AddWithValue("@PostalCode", newDemande.PostalCode ?? (object)DBNull.Value);
+                MySqlCommand.Parameters.AddWithValue("@City", newDemande.City ?? (object)DBNull.Value);
+                MySqlCommand.Parameters.AddWithValue("@Country", newDemande.Country ?? (object)DBNull.Value);
+                MySqlCommand.Parameters.AddWithValue("@Email", newDemande.Email ?? (object)DBNull.Value);
+                MySqlCommand.Parameters.AddWithValue("@Phone", newDemande.Phone ?? (object)DBNull.Value);
+                MySqlCommand.Parameters.AddWithValue("@PersonToContact", newDemande.PersonToContact ?? (object)DBNull.Value);
+                MySqlCommand.Parameters.AddWithValue("@ContactMail", newDemande.ContactMail ?? (object)DBNull.Value);
+                MySqlCommand.Parameters.AddWithValue("@ContactPhone", newDemande.ContactPhone ?? (object)DBNull.Value);
+                MySqlCommand.Parameters.AddWithValue("@ContactPosition", newDemande.ContactPosition ?? (object)DBNull.Value);
+                MySqlCommand.Parameters.AddWithValue("@RegDemandDate", newDemande.RegDemandDate ?? (object)DBNull.Value);
+                MySqlCommand.Parameters.AddWithValue("@RegDemandDecision", newDemande.RegDemandDecision ?? (object)DBNull.Value);
+                MySqlCommand.Parameters.AddWithValue("@RegDemandDecisionDate", newDemande.RegDemandDecisionDate ?? (object)DBNull.Value);
+                MySqlCommand.Parameters.AddWithValue("@RegDecisionComments", newDemande.RegDecisionComments ?? (object)DBNull.Value);
+                MySqlCommand.Parameters.AddWithValue("@StatusActivationEmail", newDemande.StatusActivationEmail ?? (object)DBNull.Value);
+                MySqlCommand.Parameters.AddWithValue("@Token", newDemande.Token ?? (object)DBNull.Value);
+                DataBaseAccessUtilities.NonQueryRequest(MySqlCommand); 
 
             }
         }
@@ -174,7 +184,37 @@ namespace DSSGBOAdmin.Models.DAL
             }
 
         }
+        public static void UpdateDemandeStatusActivationEmail(string Token, string StatusActivationEmail)
+        {
+            using (SqlConnection con = DBConnection.GetAuthConnection())
+            {
+                string StrSQL = "update RegistrationDemand set" +
+                " StatusActivationEmail = @StatusActivationEmail , " +
+                " where Token = @Token";
+                SqlCommand MySqlCommand = new SqlCommand(StrSQL, con);
+                MySqlCommand.Parameters.AddWithValue("@Token", Token);
+                MySqlCommand.Parameters.AddWithValue("@StatusActivationEmail", StatusActivationEmail);
+               
+                DataBaseAccessUtilities.NonQueryRequest(MySqlCommand);
+            }
 
+        }
+
+        public static void UpdateDemandeToken(string NewToken, string OldToken)
+        {
+            using (SqlConnection con = DBConnection.GetAuthConnection())
+            {
+                string StrSQL = "update RegistrationDemand set" +
+                " Token = @NewToken , " +
+                " where Token = @OldToken";
+                SqlCommand MySqlCommand = new SqlCommand(StrSQL, con);
+                MySqlCommand.Parameters.AddWithValue("@NewToken", NewToken);
+                MySqlCommand.Parameters.AddWithValue("@OldToken", OldToken);
+
+                DataBaseAccessUtilities.NonQueryRequest(MySqlCommand);
+            }
+
+        }
         public static void DeleteDemande(long Id)
         {
             using (SqlConnection con = DBConnection.GetAuthConnection())
@@ -195,7 +235,7 @@ namespace DSSGBOAdmin.Models.DAL
                 try
                 {
                     connection.Open();
-                    string StrSQL = "SELECt * FROM RegistrationDemand order by id desc";
+                    string StrSQL = "SELECt * FROM RegistrationDemand order by Id desc";
                     SqlCommand command = new SqlCommand(StrSQL, connection);
                     SqlDataReader dataReader = command.ExecuteReader();
                     if (dataReader != null)
@@ -216,6 +256,35 @@ namespace DSSGBOAdmin.Models.DAL
                 {
                     connection.Close();
                 }
+            }
+        }
+
+        public static KeyValuePair<string,string> SelectByToken(string Token)
+        {
+            KeyValuePair<string, string> keyValuePair = new KeyValuePair<string, string>();
+            using (SqlConnection connection = DBConnection.GetAuthConnection())
+            {
+                try
+                {
+                    connection.Open();
+                    string StrSQL = "select Token,RegDemandDate from RegistrationDemand where Token = @Token";
+                    SqlCommand command = new SqlCommand(StrSQL, connection);
+                    command.Parameters.AddWithValue("@Token", Token);
+                    SqlDataReader dataReader = command.ExecuteReader();
+                    while(dataReader.Read())
+                    {
+                        keyValuePair = new KeyValuePair<string, string>(dataReader["Token"].ToString(), dataReader["RegDemandDate"].ToString());
+                    }
+                }
+                catch (SqlException e)
+                {
+                    throw new MyException(e, "Erreur Base de données", e.Message, "DAL");
+                }
+                finally
+                {
+                    connection.Close();
+                }
+                return keyValuePair;
             }
         }
     }
