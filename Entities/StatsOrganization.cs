@@ -16,4 +16,5 @@ namespace DSSGBOAdmin.Models.Entities
         public int[] NumberFileByMonth { get; set; }
         public StatsOrganization() { }
     }
+    
 }
