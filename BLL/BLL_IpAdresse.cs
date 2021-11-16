@@ -25,25 +25,15 @@ namespace DSSGBOAdmin.Models.BLL
             DAL_IpAdresse.DeleteIpAdresse(id);
         }
 
-        public static IpAdresse SelectIpAdresseById(long id)
+        public static List<IpAdresse> SelectIpAdresseByOrg(long IdOrganization)
         {
-            return DAL_IpAdresse.SelectIpAdresseById(id);
+            return DAL_IpAdresse.SelectIpAdresseByOrg(IdOrganization);
         }
 
-        public static List<IpAdresse> SelectIpAdresseByPrefixOrg(long IdOrganization)
+        public static string SelectAllIpAdresseIndex()
         {
-            return DAL_IpAdresse.SelectIpAdresseByPrefixOrg(IdOrganization);
+            return DAL_IpAdresse.SelectAllIpAdresseIndex();
         }
-
-        public static List<IpAdresse> SelectAllIpAdresse()
-        {
-            return DAL_IpAdresse.SelectAllIpAdresse();
-        }
-
-        //public static List<string> SelectAllIpAdresseValidation(string PrefixOrg)
-        //{
-        //    return DAL_IpAdresse.SelectAllIpAdresseValidation(PrefixOrg);
-        //}
 
         // Verif IP oranization request.
         // RQ: Lors de connection il faut verifier l'@IP de la requette de l'organization. 
@@ -55,6 +45,7 @@ namespace DSSGBOAdmin.Models.BLL
             return IsValid;
             //return DAL_IpAdresse.CountIpAdresseValidationByOrganization(PrefixOrg, IpUser) > 0;
         }
+
         // GET IPV4 From Request.
         public static string GetIpRequest(IPAddress RemoteRequestIpAdresse)
         {
@@ -65,6 +56,5 @@ namespace DSSGBOAdmin.Models.BLL
             }
             return remoteIp.ToString();
         }
-
     }
 }
