@@ -14,6 +14,7 @@ namespace DSSGBOAdmin.Models.Entities
         public long IdOrganization { get; set; }
         public string Role { get; set; }
         public DateTime AccountCreationDate { get; set; }
+
         // Fields Of Organization
         public string OrganisationLogoUser { get; set; }
         public string AffiliationLogoUser { get; set; }
@@ -24,7 +25,7 @@ namespace DSSGBOAdmin.Models.Entities
         public User() { }
         public User(long IdUser, long IdOrganizationUser, string NameUser,
                            string EmailUser, string PasswordUser, string RoleUser,
-                           DateTime AccountCreationDateUser ,string OrganisationLogoUser = null,string AffiliationLogoUser=null,string EmailOrganisation=null, string PasswordOrganisation = null)
+                           DateTime AccountCreationDateUser, string OrganisationLogoUser = null, string AffiliationLogoUser = null, string EmailOrganisation = null, string PasswordOrganisation = null)
         {
             Id = IdUser;
             IdOrganization = IdOrganizationUser;
