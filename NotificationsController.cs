@@ -13,10 +13,6 @@ namespace DSSGBOAdmin.Controllers
     [ApiController]
     public class NotificationsController : Controller
     {
-
-        /*********************************** MANAGE Notifications SUPER ADMIN ***********************************/
-
-
         [HttpGet("")]
         public JsonResult IndexNotification(bool IsDashboard)
         {
@@ -29,23 +25,20 @@ namespace DSSGBOAdmin.Controllers
             {
                 return Json(new { success = false, message = ex.Message });
             }
-
         }
 
-
-        [HttpGet("{ID}")]
-        public IActionResult DetailNotification(long ID)
+        [HttpGet("{Id}")]
+        public IActionResult DetailNotification(long Id)
         {
             try
             {
-                var mNotification = BLL_Notification.SelectById(ID);
+                var mNotification = BLL_Notification.SelectById(Id);
                 return Json(new { success = true, message = "Success", data = mNotification });
             }
             catch (Exception ex)
             {
                 return Json(new { success = false, message = ex.Message });
             }
-
         }
 
         [HttpPost("")]
@@ -60,43 +53,34 @@ namespace DSSGBOAdmin.Controllers
             {
                 return Json(new { success = false, message = ex.Message });
             }
-
         }
 
-        [HttpPost("{ID}")]
-        public IActionResult PutAsNotSeen(long ID)
+        [HttpPost("{Id}")]
+        public IActionResult PutAsNotSeen(long Id)
         {
             try
             {
-                BLL_Notification.Update(ID, 0);
-                return Json(new { success = true, message = "Success", data = ID });
+                BLL_Notification.Update(Id, 0);
+                return Json(new { success = true, message = "Success", data = Id });
             }
             catch (Exception ex)
             {
                 return Json(new { success = false, message = ex.Message });
             }
-
         }
 
-
-        [HttpPost("{ID}/delete")]
-        public IActionResult DeleteNotification(long ID)
+        [HttpPost("{Id}/delete")]
+        public IActionResult DeleteNotification(long Id)
         {
-
             try
             {
-                BLL_Notification.Delete(ID);
+                BLL_Notification.Delete(Id);
                 return Json(new { success = true, message = "Success" });
             }
             catch (Exception ex)
             {
                 return Json(new { success = false, message = ex.Message });
             }
-
-
         }
-
-
-
     }
 }
