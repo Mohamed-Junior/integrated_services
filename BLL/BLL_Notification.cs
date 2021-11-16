@@ -7,26 +7,26 @@ using System.Threading.Tasks;
 
 namespace DSSGBOAdmin.Models.BLL
 {
-
     public class BLL_Notification
     {
-        
         public static long Add(Notification notification)
         {
             notification.Status = 0;
             notification.Date = DateTime.Now.ToShortDateString();
 
             return DAL_Notification.Add(notification);
-
         }
+
         public static void Update(long id, int NewStatus)
         {
             DAL_Notification.Update(id, NewStatus);
         }
+
         public static void Delete(long id)
         {
             DAL_Notification.Delete(id);
         }
+
         public static Notification SelectById(long Id)
         {
             Notification mNotification = DAL_Notification.SelectById(Id);
