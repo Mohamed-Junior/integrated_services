@@ -17,21 +17,22 @@ namespace DSSGBOAdmin.Models.DAL
 
             using (SqlConnection con = DBConnection.GetAuthConnection())
             {
-                var StrSQL = " INSERT INTO [Contract] (IdOrganization,NbrMois,NbrUser,Disk,DateStart,DateEnd,Status)" +
-                              " output INSERTED.ID " +
-                              " VALUES(@IdOrganization,@NbrMois,@NbrUser,@Disk,@DateStart,@DateEnd,@Status)";
+                var StrSQL  = " INSERT INTO [Contract] (IdOrganization,NbrMois,NbrUser,Disk,DateStart,Status)" +
+                              " output INSERTED.Id " +
+                              " VALUES(@IdOrganization,@NbrMois,@NbrUser,@Disk,@DateStart,@Status)";
                 var command = new SqlCommand(StrSQL, con);
                 command.Parameters.Add("@IdOrganization", SqlDbType.BigInt).Value = contract.IdOrganization;
-                command.Parameters.Add("@NbrMois", SqlDbType.Int).Value = contract.NbrMois;
-                command.Parameters.Add("@NbrUser", SqlDbType.Int).Value = contract.NbrUser;
-                command.Parameters.Add("@Disk", SqlDbType.NVarChar).Value = contract.Disk;
-                command.Parameters.Add("@DateStart", SqlDbType.NVarChar).Value = contract.DateStart;
-                command.Parameters.Add("@DateEnd", SqlDbType.NVarChar).Value = contract.DateEnd;
-                command.Parameters.Add("@Status", SqlDbType.NVarChar).Value = contract.Status;
+                command.Parameters.Add("@NbrMois", SqlDbType.Int).Value           = contract.NbrMois;
+                command.Parameters.Add("@NbrUser", SqlDbType.Int).Value           = contract.NbrUser;
+                command.Parameters.Add("@Disk", SqlDbType.NVarChar).Value         = contract.Disk;
+                command.Parameters.Add("@DateStart", SqlDbType.NVarChar).Value    = contract.DateStart;
+                //command.Parameters.Add("@DateEnd", SqlDbType.NVarChar).Value      = contract.DateEnd;
+                command.Parameters.Add("@Status", SqlDbType.NVarChar).Value       = contract.Status;
                 return Convert.ToInt64(DataBaseAccessUtilities.ScalarRequest(command));
             }
 
         }
+
         // update contract
         public static void Update(long Id, Contract contract)
         {
@@ -44,18 +45,18 @@ namespace DSSGBOAdmin.Models.DAL
                              "NbrUser = @NbrUser," +
                              "Disk = @Disk," +
                              "DateStart = @DateStart," +
-                             "DateEnd = @DateEnd," +
+                             //"DateEnd = @DateEnd," +
                              "Status= @Status WHERE Id = @CurId";
 
                 var command = new SqlCommand(StrSQL, con);
-                command.Parameters.Add("@CurId", SqlDbType.BigInt).Value = Id;
+                command.Parameters.Add("@CurId", SqlDbType.BigInt).Value          = Id;
                 command.Parameters.Add("@IdOrganization", SqlDbType.BigInt).Value = contract.IdOrganization;
-                command.Parameters.Add("@NbrMois", SqlDbType.Int).Value = contract.NbrMois;
-                command.Parameters.Add("@NbrUser", SqlDbType.Int).Value = contract.NbrUser;
-                command.Parameters.Add("@Disk", SqlDbType.NVarChar).Value = contract.Disk;
-                command.Parameters.Add("@DateStart", SqlDbType.NVarChar).Value = contract.DateStart;
-                command.Parameters.Add("@DateEnd", SqlDbType.NVarChar).Value = contract.DateEnd;
-                command.Parameters.Add("@Status", SqlDbType.NVarChar).Value = contract.Status;
+                command.Parameters.Add("@NbrMois", SqlDbType.Int).Value           = contract.NbrMois;
+                command.Parameters.Add("@NbrUser", SqlDbType.Int).Value           = contract.NbrUser;
+                command.Parameters.Add("@Disk", SqlDbType.NVarChar).Value         = contract.Disk;
+                command.Parameters.Add("@DateStart", SqlDbType.NVarChar).Value    = contract.DateStart;
+                //command.Parameters.Add("@DateEnd", SqlDbType.NVarChar).Value      = contract.DateEnd;
+                command.Parameters.Add("@Status", SqlDbType.NVarChar).Value       = contract.Status;
                 DataBaseAccessUtilities.NonQueryRequest(command);
             }
         }
@@ -69,7 +70,7 @@ namespace DSSGBOAdmin.Models.DAL
                 string StrSQL = "UPDATE [Contract] SET Status= @Status WHERE Id = @CurId";
 
                 SqlCommand command = new SqlCommand(StrSQL, con);
-                command.Parameters.Add("@CurId", SqlDbType.BigInt).Value = Id;
+                command.Parameters.Add("@CurId", SqlDbType.BigInt).Value    = Id;
                 command.Parameters.Add("@Status", SqlDbType.NVarChar).Value = NewStatus;
                 DataBaseAccessUtilities.NonQueryRequest(command);
             }
@@ -80,7 +81,7 @@ namespace DSSGBOAdmin.Models.DAL
             using (SqlConnection con = DBConnection.GetAuthConnection())
             {
                 string StrSQL = "UPDATE [Contract] SET Status='terminer' WHERE IdOrganization = @OrgId";
-
+                
                 SqlCommand command = new SqlCommand(StrSQL, con);
                 command.Parameters.Add("@OrgId", SqlDbType.BigInt).Value = IdOrganization;
                 DataBaseAccessUtilities.NonQueryRequest(command);
@@ -91,7 +92,7 @@ namespace DSSGBOAdmin.Models.DAL
         {
             using (SqlConnection con = DBConnection.GetAuthConnection())
             {
-                string StrSQL = "update [Contract] SET Status='en cour' WHERE Id = (SELECT MAX(Id) FROM [Contract] where IdOrganization = @OrgId)";
+                string  StrSQL = "update [Contract] SET Status='en cour' WHERE ID = (SELECT MAX(ID) FROM [Contract] where IdOrganization = @OrgId)";
 
                 SqlCommand command = new SqlCommand(StrSQL, con);
                 command.Parameters.Add("@OrgId", SqlDbType.BigInt).Value = IdOrganization;
@@ -120,9 +121,9 @@ namespace DSSGBOAdmin.Models.DAL
                 try
                 {
                     connection.Open();
-                    var StrSQL = " SELECT c.Id as IdContract, c.IdOrganization,c.NbrMois,c.NbrUser,c.Disk,c.DateStart,c.DateEnd,c.Status, o.NameFr, o.AccountStatus, o.AccountType " +
+                    var StrSQL  = " SELECT c.Id as IdContract, c.IdOrganization,c.NbrMois,c.NbrUser,c.Disk,c.DateStart,c.Status, o.NameFr, o.AccountStatus, o.AccountType " +
                                     " FROM [Contract] c, [Organization] o " +
-                                    " WHERE c.IdOrganization = o.Id AND c.Id = @Id order by c.Id desc";
+                                    " WHERE c.Id = @Id and c.IdOrganization = o.Id order by c.id desc";
                     var command = new SqlCommand(StrSQL, connection);
                     command.Parameters.Add("@Id", SqlDbType.BigInt).Value = id;
                     SqlDataReader dataReader = command.ExecuteReader();
@@ -142,7 +143,7 @@ namespace DSSGBOAdmin.Models.DAL
                 return contract;
             }
         }
-
+        
         // select one record of table contract
         public static Contract SelectActiveContratByOrganization(long idOrganization)
         {
@@ -153,9 +154,9 @@ namespace DSSGBOAdmin.Models.DAL
                 try
                 {
                     connection.Open();
-                    var StrSQL = "SELECT top(1) c.Id as IdContract, c.IdOrganization,c.NbrMois,c.NbrUser,c.Disk,c.DateStart,c.DateEnd,c.Status, o.NameFr, o.AccountStatus, o.AccountType " +
+                    var StrSQL  = "SELECT top(1) c.Id as IdContract, c.IdOrganization,c.NbrMois,c.NbrUser,c.Disk,c.DateStart,c.Status, o.NameFr, o.AccountStatus, o.AccountType " +
                                  " FROM [Contract] c, [Organization] o " +
-                                 " WHERE c.IdOrganization = o.Id AND c.IdOrganization = @IdOrg AND c.Status = 'en cour' order by c.Id desc ";
+                                 " WHERE c.IdOrganization = @IdOrg and c.Status = 'en cour' order by c.id desc ";
                     var command = new SqlCommand(StrSQL, connection);
                     command.Parameters.Add("@IdOrg", SqlDbType.BigInt).Value = idOrganization;
                     SqlDataReader dataReader = command.ExecuteReader();
@@ -180,15 +181,15 @@ namespace DSSGBOAdmin.Models.DAL
         // select all record of table contract by organization
         public static List<Contract> SelectByOrganization(long IdOrg)
         {
-            List<Contract> Contracts = new List<Contract>();
+            List<Contract> Contracts        = new List<Contract>();
             using (SqlConnection connection = DBConnection.GetAuthConnection())
             {
                 try
                 {
                     connection.Open();
-                    var StrSQL = "SELECT c.Id as IdContract, c.IdOrganization,c.NbrMois,c.NbrUser,c.Disk,c.DateStart,c.DateEnd,c.Status, o.NameFr , o.AccountStatus, o.AccountType " +
+                    var StrSQL = "SELECT c.Id as IdContract, c.IdOrganization,c.NbrMois,c.NbrUser,c.Disk,c.DateStart,c.Status, o.NameFr , o.AccountStatus, o.AccountType " +
                                  " FROM [Contract] c, [Organization] o " +
-                                 " WHERE c.IdOrganization = o.Id AND c.IdOrganization = @Id order by c.Id desc";
+                                 " WHERE c.IdOrganization = @Id and c.IdOrganization = o.Id order by c.id desc";
                     var command = new SqlCommand(StrSQL, connection);
                     command.Parameters.Add("@Id", SqlDbType.BigInt).Value = IdOrg;
                     SqlDataReader dataReader = command.ExecuteReader();
@@ -209,7 +210,7 @@ namespace DSSGBOAdmin.Models.DAL
             }
         }
 
-
+        
         // select all record of table contract by organization
         public static Contract SelectActiveByOrganization(long IdOrg)
         {
@@ -219,11 +220,11 @@ namespace DSSGBOAdmin.Models.DAL
                 try
                 {
                     connection.Open();
-                    string StrSQL =
-                        " SELECT c.Id as IdContract, c.IdOrganization,c.NbrMois,c.NbrUser,c.Disk,c.DateStart,c.DateEnd,c.Status, " +
+                    string StrSQL = 
+                        " SELECT c.Id as IdContract, c.IdOrganization,c.NbrMois,c.NbrUser,c.Disk,c.DateStart,c.Status, " +
                         "        o.NameFr , o.AccountStatus, o.AccountType " +
                         " FROM [Contract] c, [Organization] o " +
-                        " WHERE c.IdOrganization = o.Id AND c.IdOrganization = @Id AND c.Status = 'en cour' order by c.Id desc";
+                        " WHERE c.IdOrganization = @Id and c.IdOrganization = o.Id and c.Status = 'en cour' order by c.id desc";
                     SqlCommand command = new SqlCommand(StrSQL, connection);
                     command.Parameters.Add("@Id", SqlDbType.BigInt).Value = IdOrg;
                     SqlDataReader dataReader = command.ExecuteReader();
@@ -248,16 +249,16 @@ namespace DSSGBOAdmin.Models.DAL
         // select all record of table contract
         public static List<Contract> SelectAll()
         {
-            List<Contract> Contracts = new List<Contract>();
+            List<Contract> Contracts        = new List<Contract>();
             using (SqlConnection connection = DBConnection.GetAuthConnection())
             {
                 try
                 {
                     connection.Open();
-                    var StrSQL = "SELECT c.Id as IdContract, c.IdOrganization,c.NbrMois,c.NbrUser,c.Disk,c.DateStart,c.DateEnd,c.Status, o.NameFr , o.AccountStatus, o.AccountType  " +
+                    var StrSQL     = "SELECT c.Id as IdContract, c.IdOrganization,c.NbrMois,c.NbrUser,c.Disk,c.DateStart,c.Status, o.NameFr , o.AccountStatus, o.AccountType  " +
                         " FROM [Contract] c, [Organization] o " +
-                        " WHERE c.IdOrganization = o.Id order by c.Id desc";
-                    var command = new SqlCommand(StrSQL, connection);
+                        " WHERE c.IdOrganization = o.Id order by c.Status";
+                    var command    = new SqlCommand(StrSQL, connection);
                     var dataReader = command.ExecuteReader();
 
                     while (dataReader.Read())
@@ -279,18 +280,18 @@ namespace DSSGBOAdmin.Models.DAL
 
         private static Contract ConvertDataReaderToContract(SqlDataReader dataReader)
         {
-            Contract contract = new Contract();
-            contract.Id = Convert.ToInt64(dataReader["IdContract"]);
-            contract.NameOrganization = dataReader["NameFr"].ToString();
+            Contract contract           = new Contract();
+            contract.Id                 = Convert.ToInt64(dataReader["IdContract"]);
+            contract.NameOrganization   = dataReader["NameFr"].ToString();
             contract.StatusOrganisation = dataReader["AccountStatus"].ToString();
-            contract.TypeOrganization = dataReader["AccountType"].ToString();
-            contract.IdOrganization = long.Parse(dataReader["IdOrganization"].ToString());
-            contract.NbrMois = int.Parse(dataReader["NbrMois"].ToString());
-            contract.NbrUser = int.Parse(dataReader["NbrUser"].ToString());
-            contract.Disk = dataReader["Disk"].ToString();
-            contract.DateEnd = dataReader["DateEnd"].ToString();
-            contract.DateStart = dataReader["DateStart"].ToString();
-            contract.Status = dataReader["Status"].ToString();
+            contract.TypeOrganization   = dataReader["AccountType"].ToString();
+            contract.IdOrganization     = long.Parse(dataReader["IdOrganization"].ToString());
+            contract.NbrMois            = int.Parse(dataReader["NbrMois"].ToString());
+            contract.NbrUser            = int.Parse(dataReader["NbrUser"].ToString());
+            contract.Disk               = dataReader["Disk"].ToString();
+            //contract.DateEnd            = dataReader["DateEnd"].ToString();
+            contract.DateStart          = dataReader["DateStart"].ToString();
+            contract.Status             = dataReader["Status"].ToString();
             return contract;
         }
     }
