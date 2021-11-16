@@ -53,5 +53,5 @@ namespace DSSGBOAdmin.Models.DAL
             }
             return cipherText;
         }
-    }
+    } 
 }
