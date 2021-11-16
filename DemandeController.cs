@@ -11,11 +11,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace DSSGBOAdmin.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class DemandeController : Controller
-    {
-
         [Route("")]
         [HttpGet]
         public IActionResult Get()
@@ -44,9 +39,8 @@ namespace DSSGBOAdmin.Controllers
                 }
                 else
                 {
-                    return Json(new { success = true, message = "Demande introuvable." });
+                    return Json(new { success = false, message = "Demande introuvable." });
                 }
-
             }
             catch (Exception ex)
             {
@@ -54,36 +48,29 @@ namespace DSSGBOAdmin.Controllers
             }
 
         }
-
 
         [Route("")]
         [HttpPost]
-        public JsonResult RegisterNewDemande(Demande demande)
+        public JsonResult RegisterNewDemande(Demande demande, string Url)
         {
             try
             {
-
-                BLL_Demande.Add(demande);
-                return Json(new { success = true, message = "Ajouté avec success" });
-
-
+                string message = BLL_Demande.Add(demande, Url);
+                return Json(new { success = true, message = message });
             }
             catch (Exception ex)
             {
                 return Json(new { success = false, message = ex.Message });
             }
         }
-
 
         [HttpPost("{id}")]
         public JsonResult ResponseDemande(int id, string OrganizationSystemPrefix, [FromBody] Demande demande)
         {
             try
             {
-
                 BLL_Demande.Update(id, demande, OrganizationSystemPrefix);
                 return Json(new { success = true, message = "modifié avec success" });
-
             }
             catch (Exception ex)
             {
@@ -92,5 +79,55 @@ namespace DSSGBOAdmin.Controllers
 
         }
 
+        [Route("Tokens/{Token}")]
+        [HttpGet]
+        public IActionResult GetByToken(string Token)
+        {
+            try
+            {
+                KeyValuePair<string, string> keyValuePair = BLL_Demande.SelectByToken(Token);
+                if (keyValuePair.Key != null)
+                {
+                    return Json(new { success = true, message = "Demande trouvée.", data = keyValuePair });
+                }
+                else
+                {
+                    return Json(new { success = false, message = "Demande introuvable." });
+                }
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = ex.Message });
+            }
+        }
+        [Route("UpdateDemandeStatusActivationEmail/{Token}/{StatusActivationEmail}")]
+        [HttpPost]
+        public JsonResult UpdateDemandeStatusActivationEmail(string Token, string StatusActivationEmail)
+        {
+            try
+            {
+                BLL_Demande.UpdateDemandeStatusActivationEmail(Token, StatusActivationEmail);
+                return Json(new { success = true, message = "Success" });
+
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = ex.Message });
+            }
+        }
+        [Route("UpdateDemandeToken/{NewToken}/{OldToken}")]
+        [HttpPost]
+        public JsonResult UpdateDemandeToken(string NewToken, string OldToken)
+        {
+            try
+            {
+                BLL_Demande.UpdateDemandeToken(NewToken, OldToken);
+                return Json(new { success = true, message = "Success" });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = ex.Message });
+            }
+        }
     }
 }
