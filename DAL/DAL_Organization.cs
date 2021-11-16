@@ -27,6 +27,7 @@ namespace DSSGBOAdmin.Models.DAL
             else
                 return false;
         }
+
         // test sur l'uncite 
         private static bool CheckEntityUnicityName(string Name)
         {
@@ -44,6 +45,7 @@ namespace DSSGBOAdmin.Models.DAL
             else
                 return false;
         }
+
         // test sur l'uncite 
         private static bool CheckEntityUnicityEmail(string Email)
         {
@@ -61,6 +63,7 @@ namespace DSSGBOAdmin.Models.DAL
             else
                 return false;
         }
+
         // test sur l'uncite 
         private static bool CheckEntityUnicityAcronym(string Acronym)
         {
@@ -78,6 +81,7 @@ namespace DSSGBOAdmin.Models.DAL
             else
                 return false;
         }
+
         // Test sur l'uncite Name
         public static bool CheckNameUnicity(string name)
         {
@@ -93,6 +97,7 @@ namespace DSSGBOAdmin.Models.DAL
         {
             return CheckEntityUnicityAcronym(acronym);
         }
+
         // insert Organization
         public static long Add(Organization organization)
         {
@@ -118,7 +123,7 @@ namespace DSSGBOAdmin.Models.DAL
                     "PostalCode,City,Country,Email,Phone,PersonToContact,ContactMail,ContactPhone,ContactPosition,AccountType,AccountStatus," +
                     "ParDiffusionEmail,ParDiffusionEmailPW,ParOutgoingMailChar,ParIngoingMailChar," +
                     "OrganizationSystemPrefix)" +
-                    " output INSERTED.ID " +
+                    " output INSERTED.Id " +
                     " VALUES(@NameFr,@NameAr,@Acronym,@OrganisationLogo,@Affiliation,@AffiliationLogo," +
                     "@FieldOfActivity,@Adress,@PostalCode,@City,@Country,@Email,@Phone," +
                     "@PersonToContact,@ContactMail,@ContactPhone,@ContactPosition," +
@@ -153,6 +158,7 @@ namespace DSSGBOAdmin.Models.DAL
                 return Convert.ToInt64(DataBaseAccessUtilities.ScalarRequest(command));
             }
         }
+
         // Update Organization by GBO
         public static void Update(long id, Organization organization)
         {
@@ -226,6 +232,7 @@ namespace DSSGBOAdmin.Models.DAL
                 DataBaseAccessUtilities.NonQueryRequest(MySqlCommand);
             }
         }
+
         // delete Organization
         public static void Delete(long id)
         {
@@ -236,6 +243,7 @@ namespace DSSGBOAdmin.Models.DAL
                 DataBaseAccessUtilities.NonQueryRequest(command);
             }
         }
+        
         // select one record of table user
         public static Organization SelectById(long id)
         {
@@ -290,6 +298,7 @@ namespace DSSGBOAdmin.Models.DAL
                 return organization;
             }
         }
+        
         // select all record of table Organization
         public static List<Organization> SelectAll()
         {
