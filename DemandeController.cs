@@ -11,6 +11,12 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace DSSGBOAdmin.Controllers
 {
+    [Route("api/[controller]")]
+    [ApiController]
+    public class DemandeController : Controller
+    {
+
+
         [Route("")]
         [HttpGet]
         public IActionResult Get()
